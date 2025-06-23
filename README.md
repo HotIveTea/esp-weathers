@@ -24,7 +24,7 @@
 ## Key Functionalities
 ### 1. Sensor Reading
 Reads temperature and humidity using the dht.DHT11 module.
-Calculates PPM from MQ135 using ADC and resistance ratio formula:
+Calculates PPM from MQ135 using ADC and resistance ratio formula: (this maybe wrong, if you have a better fomula just use it)
 ```python
 RS = 10k * (65536 - value) / value
 PPM = 116.6020682 * (RS/R0)^-2.769034857
@@ -82,6 +82,6 @@ The dashboard is now accessible at: https://<your-username>.github.io/<repo-name
 - Add buzzer alerts for poor air quality
 - Save data to Firebase or Google Sheets
 - Use a larger display or mobile notification system
-- Apply basic AI logic for smarter forecasting (Definily work in the future)
+- Apply basic AI logic for smarter forecasting (Definitely work in the future)
 ### License
 This project was developed for educational purposes using ESP32, MicroPython, and MQTT technologies.
