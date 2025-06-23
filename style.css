@@ -1,0 +1,57 @@
+body {
+    margin: 0;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    transition: background-color 0.5s ease, color 0.5s ease;
+    color: #111;
+}
+
+h2 {
+    text-align: center;
+    color: #fff;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+/* Khối thông tin */
+.data-box {
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 12px;
+    padding: 20px;
+    margin: auto;
+    width: 350px;
+    text-align: left;
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Các trạng thái thời tiết */
+body.clear {
+    background-color: #a3d5ff;
+    /* Trời quang đãng */
+}
+
+body.rain {
+    background-color: #4a7ba7;
+    /* Trời mưa */
+    color: #fff;
+}
+
+body.cloud {
+    background-color: #cfd8dc;
+    /* Trời nhiều mây */
+}
+
+body.hot {
+    background-color: #ffab91;
+    /* Nắng nóng */
+}
+
+body.cold {
+    background-color: #90caf9;
+    /* Trời mát */
+}
+
+body.dirty {
+    background-color: #b0bec5;
+    /* Ô nhiễm */
+}

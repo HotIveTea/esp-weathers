@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <title>ESP32 Weather Dashboard (MQTT)</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f0f8ff;
+            color: #333;
+            text-align: center;
+            padding: 20px;
+            transition: background-color 0.5s;
+        }
+
+        .data-box {
+            margin: 20px auto;
+            padding: 15px;
+            max-width: 400px;
+            background-color: #ffffffaa;
+            border-radius: 10px;
+            box-shadow: 0 0 10px #ccc;
+        }
+
+        .data-box p {
+            font-size: 1.2em;
+            margin: 8px 0;
+        }
+
+        canvas {
+            margin-top: 20px;
+            max-width: 90vw;
+        }
+
+        /* Dự báo thời tiết */
+        .clear {
+            background-color: #f0f8ff;
+        }
+
+        .rain {
+            background-color: #a1c4fd;
+        }
+
+        .cloud {
+            background-color: #d0d4d9;
+        }
+
+        .hot {
+            background-color: #ffcccb;
+        }
+
+        .cold {
+            background-color: #b3d9ff;
+        }
+
+        .dirty {
+            background-color: #cccccc;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+</head>
+
+<body id="weatherBody" class="clear">
+    <h2>🌤️ ESP32 Weather Station (MQTT)</h2>
+
+    <div class="data-box">
+        <p>Nhiệt độ (°C): <b id="tempC">--</b></p>
+        <p>Nhiệt độ (°F): <b id="tempF">--</b></p>
+        <p>Độ ẩm: <b id="hum">--</b></p>
+        <p>Chất lượng không khí (PPM): <b id="ppm">--</b></p>
+        <p>Dự báo: <b id="forecast">Đang cập nhật...</b></p>
+    </div>
+
+    <canvas id="chart"></canvas>
+
+    <script>
+        const ctx = document.getElementById('chart').getContext('2d');
+        const chart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: [],
+                datasets: [
+                    {
+                        label: 'Temp (°C)',
+                        backgroundColor: 'rgba(255, 99, 132, 0.5)',
+                        borderColor: 'red',
+                        data: []
+                    },
+                    {
+                        label: 'Temp (°F)',
+                        backgroundColor: 'rgba(255, 159, 64, 0.5)',
+                        borderColor: 'orange',
+                        data: []
+                    },
+                    {
+                        label: 'Humidity (%)',
+                        backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                        borderColor: 'blue',
+                        data: []
+                    },
+                    {
+                        label: 'Air Quality (ppm)',
+                        backgroundColor: 'rgba(75, 192, 192, 0.5)',
+                        borderColor: 'green',
+                        data: []
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: { beginAtZero: true }
+                }
+            }
+        });
+
+        const client = mqtt.connect('wss://broker.hivemq.com:8884/mqtt');
+        client.subscribe('esp32/data');
+
+        client.on('connect', () => {
+            console.log("✅ Đã kết nối MQTT broker!");
+            client.subscribe('esp32/data');
+        });
+
+        client.on('message', (topic, message) => {
+            const body = document.getElementById("weatherBody");
+
+            try {
+                const data = JSON.parse(message.toString());
+                const t = data.temp;
+                const tf = t * 9 / 5 + 32;
+                const h = data.hum;
+                const a = data.ppm;
+                const time = new Date().toLocaleTimeString();
+
+                // Biểu đồ
+                chart.data.labels.push(time);
+                chart.data.datasets[0].data.push(t);
+                chart.data.datasets[1].data.push(tf);
+                chart.data.datasets[2].data.push(h);
+                chart.data.datasets[3].data.push(a);
+
+                if (chart.data.labels.length > 10) {
+                    chart.data.labels.shift();
+                    chart.data.datasets.forEach(d => d.data.shift());
+                }
+                chart.update();
+
+                // Thông tin hiện tại
+                document.getElementById("tempC").textContent = `${t.toFixed(1)}°C`;
+                document.getElementById("tempF").textContent = `${tf.toFixed(1)}°F`;
+                document.getElementById("hum").textContent = `${h.toFixed(1)}%`;
+                document.getElementById("ppm").textContent = `${a.toFixed(1)} ppm`;
+
+                // Dự báo
+                let forecast = "🌤️ Trời quang đãng";
+                let weatherClass = "clear";
+
+                if (h > 85 && t < 28) {
+                    forecast = "⛈️ Trời có thể mưa"; weatherClass = "rain";
+                } else if (h > 70 && t < 30) {
+                    forecast = "🌥️ Trời nhiều mây, có thể có mưa nhẹ"; weatherClass = "cloud";
+                } else if (a > 400 && t > 32) {
+                    forecast = "🌫️ Nắng nóng và không khí ô nhiễm"; weatherClass = "dirty";
+                } else if (t > 33) {
+                    forecast = "☀️ Trời nắng gắt"; weatherClass = "hot";
+                } else if (h < 40 && t < 25) {
+                    forecast = "🌬️ Trời mát, có thể khô hanh"; weatherClass = "cold";
+                }
+
+                document.getElementById("forecast").textContent = forecast;
+                body.className = weatherClass;
+
+            } catch (e) {
+                console.error("❌ Lỗi xử lý MQTT data:", e);
+            }
+        });
+    </script>
+</body>
+
+</html>
