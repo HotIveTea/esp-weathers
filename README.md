@@ -80,7 +80,7 @@ The dashboard is now accessible at: https://<your-username>.github.io/<repo-name
 - MQTT.js for WebSocket-based broker connection
 ### Some images about the project
 ![Sensor board](image/z6739964476523_3ff79049ff001856ac2eccd038b6a261.jpg) <br>
-![Web dashboard](image/Screenshot 2025-06-25 105555.png)
+![Web dashboard](image/Screenshot_2025-06-25_105555.png)
 ### Possible Extensions
 - Add buzzer alerts for poor air quality
 - Save data to Firebase or Google Sheets
