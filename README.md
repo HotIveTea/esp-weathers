@@ -79,7 +79,7 @@ The dashboard is now accessible at: https://<your-username>.github.io/<repo-name
 - Chart.js for data visualization ( stolen from internet)
 - MQTT.js for WebSocket-based broker connection
 ### Some images about the project
-![alt text]("C:\Users\Admin\Downloads\z6739964476523_3ff79049ff001856ac2eccd038b6a261.jpg")
+![alt text]("C:\Users\Admin\Downloads\z6739964476523_3ff79049ff001856ac2eccd038b6a261.jpg") <br>
 ![alt text]("C:\Users\Admin\Pictures\Screenshots\Screenshot 2025-06-25 105555.png")
 ### Possible Extensions
 - Add buzzer alerts for poor air quality
