@@ -79,7 +79,7 @@ The dashboard is now accessible at: https://<your-username>.github.io/<repo-name
 - Chart.js for data visualization ( stolen from internet)
 - MQTT.js for WebSocket-based broker connection
 ### Some images about the project
-![Web dashboard](Screenshot 2025-06-25 105555.png)
+![Web dashboard](image/Screenshot 2025-06-25 105555.png)
 ### Possible Extensions
 - Add buzzer alerts for poor air quality
 - Save data to Firebase or Google Sheets
