@@ -15,8 +15,8 @@ i2c = SoftI2C(sda=Pin(21), scl=Pin(22))
 oled = ssd1306.SSD1306_I2C(128, 64, i2c)
 
 # WiFi & MQTT
-ssid = 'Nha Tret 2.4G'
-password = '01684306403'
+ssid = 'YOUR_SSID'
+password = 'YOUR_PASSWORD'
 mqtt_server = 'broker.hivemq.com'
 mqtt_topic = b'esp32/data'
 mqtt_client_id = b'esp32-weather'
@@ -40,9 +40,9 @@ def connect_wifi():
         print(".", end="")
         time.sleep(0.5)
     if wlan.isconnected():
-        print("\n✅ WiFi connected:", wlan.ifconfig()[0])
+        print("\n WiFi connected:", wlan.ifconfig()[0])
     else:
-        print("\n❌ Failed to connect WiFi")
+        print("\n Failed to connect WiFi")
     return wlan
 
 # Sensor read
